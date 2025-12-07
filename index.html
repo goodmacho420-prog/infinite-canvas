@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Infinite Canvas</title>
+  <style>
+    body { margin:0; background:#000; overflow:hidden; }
+    canvas { background:#000; display:block; }
+  </style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+const canvas = document.getElementById("c");
+const ctx = canvas.getContext("2d");
+
+function resize(){
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener("resize", resize);
+resize();
+
+let scale = 1;
+let offsetX = 0;
+let offsetY = 0;
+let drawing = false;
+
+canvas.onmousedown = e => { drawing = true; draw(e); };
+canvas.onmousemove = e => { if(drawing) draw(e); };
+canvas.onmouseup = () => drawing = false;
+
+canvas.onwheel = e => {
+  e.preventDefault();
+  const zoom = e.deltaY < 0 ? 1.1 : 0.9;
+  scale *= zoom;
+  drawAll();
+};
+
+function draw(e){
+  const x = (e.offsetX - offsetX) / scale;
+  const y = (e.offsetY - offsetY) / scale;
+  ctx.fillStyle = "white";
+  ctx.beginPath();
+  ctx.arc(x, y, 3, 0, Math.PI*2);
+  ctx.fill();
+}
+
+function drawAll(){
+  // 再描画のベース
+}
+</script>
+</body>
+</html>
